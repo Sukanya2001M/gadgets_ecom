@@ -15,11 +15,46 @@ class Usecases {
     }
   }
 
-  Future<Map<String, dynamic>> call(int productId, double price, String color) {
-    return repositories.updateProduct(productId, price, color);
+  Future<dynamic> addProductusr(
+    String name,
+    int year,
+    int price,
+    String cpumodel,
+    String harddisk,
+  ) async {
+    dynamic response = await repositories.addProductrepo(
+      name,
+      year,
+      price,
+      cpumodel,
+      harddisk,
+    );
+    print('usecase add response: $response');
+    return response;
   }
 
-  Future<Map<String, dynamic>> execute(Map<String, dynamic> productData) async {
-    return await repositories.createProduct(productData);
+  Future<dynamic> updateproductusr(String name, int year, double price,
+      String cpumodel, String harddisk, String color) async {
+    dynamic response = await repositories.updateproductrepo(
+        name, year, price, cpumodel, harddisk, color);
+    print('usecase update ${response}');
+    return response;
+  }
+
+  Future<String?> deleteproductusr() async {
+    try {
+      String? response = await repositories.deleteproductrepo();
+
+      if (response != null) {
+        print("Use case delete: $response");
+        return response;
+      } else {
+        print("Delete failed at use case level.");
+        return null;
+      }
+    } catch (e) {
+      print("Error in use case delete: $e");
+      return null;
+    }
   }
 }

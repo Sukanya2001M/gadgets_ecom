@@ -7,7 +7,7 @@ class Repositories {
   Future<dynamic> fetchProductrepo() async {
     try {
       var response = await dio.get(Constants.allproduct_url);
-      // print('repository ${response.data}');
+      // print('repository all ${response.data}');
       return response.data;
     } catch (e) {
       print('Error fetching profile details: $e');
@@ -15,40 +15,72 @@ class Repositories {
     }
   }
 
-  Future<Map<String, dynamic>> updateProduct(
-      int productId, double price, String color) async {
-    final String url = "$Constants.baseUrl/$productId";
-
-    final Map<String, dynamic> productData = {
-      "name": "Apple AirPods",
-      "data": {"generation": "3rd", "price": price, "color": color}
-    };
-
+  Future<dynamic> addProductrepo(
+    String name,
+    int year,
+    int price,
+    String cpumodel,
+    String harddisk,
+  ) async {
     try {
-      Response response = await dio.put(
-        url,
-        data: productData,
-        options: Options(headers: {"Content-Type": "application/json"}),
+      var response = await dio.post(
+        Constants.add_url,
+        data: {
+          "name": name,
+          "data": {
+            "year": year,
+            "price": price,
+            "cpu_model": cpumodel,
+            "hard_disk": harddisk,
+          }
+        },
       );
-
-      if (response.statusCode == 200) {
-        return response.data;
-      } else {
-        throw Exception("Failed to update product: ${response.statusCode}");
-      }
-    } on DioException catch (e) {
-      throw Exception("Error updating product: ${e.message}");
+      print('repository add ${response.data}');
+      return response.data;
+    } catch (e) {
+      print('Error fetching profile details: $e');
+      return null;
     }
   }
 
-  Future<Map<String, dynamic>> createProduct(
-      Map<String, dynamic> productData) async {
+  Future<dynamic> updateproductrepo(String name, int year, double price,
+      String cpumodel, String harddisk, String color) async {
     try {
-      Response response = await dio.post("objects", data: productData);
-      return response.data;
+      dynamic response = await dio.put(
+        Constants.update_url,
+        data: {
+          "name": name,
+          "data": {
+            "year": year,
+            "price": price,
+            "CPU model": cpumodel,
+            "Hard disk size": harddisk,
+            "color": color,
+          }
+        },
+      );
+      print('updated repo $response');
+      return response;
     } catch (e) {
-      print("Error creating product: $e");
-      throw Exception("Failed to create product");
+      print("Error in updating $e");
+      return null;
+    }
+  }
+
+  Future<String?> deleteproductrepo() async {
+    try {
+      dynamic response = await dio.delete(Constants.delete_url);
+      if (response.statusCode == 200) {
+        String message = response.data['message']; // Access the "message" field
+        print("Delete Message: $message");
+        return message; // Return the message
+      } else {
+        print("Failed to delete: ${response.statusCode}");
+        return null;
+      }
+    } catch (e) {
+      print("Error in deleting repo: $e");
+      return null;
     }
   }
 }

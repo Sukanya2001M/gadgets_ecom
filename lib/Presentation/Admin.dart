@@ -56,7 +56,68 @@ class AdminScreenState extends State<AdminScreen> {
         floatingActionButton: FloatingActionButton(
           backgroundColor: Colors.indigo,
           onPressed: () {
-            // Add new product action
+            showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  title: Text("Enter Product Details"),
+                  content: SingleChildScrollView(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        TextFormField(
+                          controller: controller.nameControllerad,
+                          keyboardType: TextInputType.text,
+                          decoration: InputDecoration(labelText: "Name"),
+                        ),
+                        TextFormField(
+                          controller: controller.yearController,
+                          decoration: InputDecoration(labelText: "Year"),
+                          keyboardType: TextInputType.number,
+                        ),
+                        TextFormField(
+                          controller: controller.priceController,
+                          decoration: InputDecoration(labelText: "Price"),
+                          keyboardType: TextInputType.number,
+                        ),
+                        TextFormField(
+                          controller: controller.cpuController,
+                          decoration: InputDecoration(labelText: "CPU Model"),
+                        ),
+                        TextFormField(
+                          controller: controller.diskController,
+                          decoration:
+                              InputDecoration(labelText: "Hard Disk Size"),
+                        ),
+                      ],
+                    ),
+                  ),
+                  actions: [
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: Text("Cancel"),
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        controller.addproductctr(
+                            controller.nameControllerad.text, // String
+                            int.tryParse(controller.yearController.text) ??
+                                0, // Convert String to int
+                            int.tryParse(controller.priceController.text) ??
+                                0, // Convert String to int
+                            controller.cpuController.text, // String
+                            controller.diskController.text // String
+                            );
+                        Navigator.of(context).pop();
+                      },
+                      child: Text("Submit"),
+                    ),
+                  ],
+                );
+              },
+            );
           },
           child: const Icon(Icons.add, size: 28, color: Colors.white),
         ),
@@ -111,45 +172,124 @@ class AdminScreenState extends State<AdminScreen> {
                         ),
                         Expanded(
                           child: Padding(
-                            padding: const EdgeInsets.all(3),
+                            padding: const EdgeInsets.all(8),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
+                                // Product Name
                                 controller.isEditing[index]
                                     ? TextField(
                                         controller:
-                                            controller.nameControllers[index],
+                                            controller.nameController[index],
                                         decoration: const InputDecoration(
+                                          labelText: "Product Name",
                                           border: OutlineInputBorder(),
                                         ),
                                       )
                                     : Text(
                                         controller.name[index],
                                         style: const TextStyle(
-                                          fontSize: 10,
+                                          fontSize: 16,
                                           fontWeight: FontWeight.bold,
-                                          color: Colors.indigo,
+                                          color: Colors.black87,
                                         ),
                                       ),
+                                const SizedBox(height: 10),
+
+                                // Year
                                 controller.isEditing[index]
                                     ? TextField(
-                                        controller:
-                                            controller.dataControllers[index],
+                                        controller: controller.yearController,
+                                        keyboardType: TextInputType.number,
                                         decoration: const InputDecoration(
+                                          labelText: "Year",
                                           border: OutlineInputBorder(),
                                         ),
                                       )
                                     : Text(
-                                        controller.data[index],
+                                        "Year: ${controller.products[index].data?['year'] ?? 'N/A'}",
                                         style: const TextStyle(
-                                          fontSize: 10,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.indigo,
-                                        ),
+                                            fontSize: 14,
+                                            color: Colors.black54),
                                       ),
+                                const SizedBox(height: 8),
+
+                                // Price
+                                controller.isEditing[index]
+                                    ? TextField(
+                                        controller: controller.priceController,
+                                        keyboardType:
+                                            TextInputType.numberWithOptions(
+                                                decimal: true),
+                                        decoration: const InputDecoration(
+                                          labelText: "Price",
+                                          border: OutlineInputBorder(),
+                                        ),
+                                      )
+                                    : Text(
+                                        "Price: \$${controller.products[index].data?['price'] ?? 'N/A'}",
+                                        style: const TextStyle(
+                                            fontSize: 14,
+                                            color: Colors.black54),
+                                      ),
+                                const SizedBox(height: 8),
+
+                                // CPU Model
+                                controller.isEditing[index]
+                                    ? TextField(
+                                        controller: controller.cpuController,
+                                        decoration: const InputDecoration(
+                                          labelText: "CPU Model",
+                                          border: OutlineInputBorder(),
+                                        ),
+                                      )
+                                    : Text(
+                                        "CPU: ${controller.products[index].data?['CPU model'] ?? 'N/A'}",
+                                        style: const TextStyle(
+                                            fontSize: 14,
+                                            color: Colors.black54),
+                                      ),
+                                const SizedBox(height: 8),
+
+                                // Hard Disk Size
+                                controller.isEditing[index]
+                                    ? TextField(
+                                        controller: controller.diskController,
+                                        decoration: const InputDecoration(
+                                          labelText: "Hard Disk Size",
+                                          border: OutlineInputBorder(),
+                                        ),
+                                      )
+                                    : Text(
+                                        "Hard Disk: ${controller.products[index].data?['Hard disk size'] ?? 'N/A'}",
+                                        style: const TextStyle(
+                                            fontSize: 14,
+                                            color: Colors.black54),
+                                      ),
+                                const SizedBox(height: 8),
+
+                                // Color
+                                controller.isEditing[index]
+                                    ? TextField(
+                                        controller: controller.nameControllerad,
+                                        decoration: const InputDecoration(
+                                          labelText: "Color",
+                                          border: OutlineInputBorder(),
+                                        ),
+                                      )
+                                    : Text(
+                                        "Color: ${controller.products[index].data?['color'] ?? 'N/A'}",
+                                        style: const TextStyle(
+                                            fontSize: 14,
+                                            color: Colors.black54),
+                                      ),
+
+                                const SizedBox(height: 12),
+
+                                // Action Buttons
                                 Obx(() {
                                   return Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.end,
                                     children: [
                                       IconButton(
                                         icon: Icon(
@@ -162,15 +302,41 @@ class AdminScreenState extends State<AdminScreen> {
                                         ),
                                         onPressed: () {
                                           if (controller.isEditing[index]) {
-                                            controller.updateProduct(index);
+                                            controller.updateproductctr(
+                                              controller
+                                                  .nameController[index].text,
+                                              int.tryParse(controller
+                                                      .yearController.text) ??
+                                                  0, // Convert to int
+                                              double.tryParse(controller
+                                                      .priceController.text) ??
+                                                  0.0,
+                                              controller.cpuController.text,
+                                              controller.diskController.text,
+                                              controller.colorController.text,
+                                            );
                                           } else {
                                             controller.enableEditing(index);
                                           }
                                         },
                                       ),
+                                      IconButton(
+                                        icon: const Icon(Icons.delete,
+                                            color: Colors.red),
+                                        onPressed: () {
+                                          controller.deleteporoductctr();
+                                        },
+                                      ),
+                                      IconButton(
+                                        icon: const Icon(Icons.timelapse_sharp,
+                                            color: Colors.orange),
+                                        onPressed: () {
+                                          // Time-based function here
+                                        },
+                                      ),
                                     ],
                                   );
-                                })
+                                }),
                               ],
                             ),
                           ),
