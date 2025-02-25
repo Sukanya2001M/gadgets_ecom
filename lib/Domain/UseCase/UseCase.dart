@@ -6,7 +6,6 @@ class Usecases {
 
   Future<List<Map<String, dynamic>>> fetchProductusr() async {
     dynamic response = await repositories.fetchProductrepo();
-
     // print('usecase response: $response');
     if (response is List) {
       return List<Map<String, dynamic>>.from(response);

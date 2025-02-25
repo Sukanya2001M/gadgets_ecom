@@ -7,6 +7,8 @@ class Controller extends GetxController {
   final RxList<Model> products = <Model>[].obs;
   final RxList<String> name = <String>[].obs;
   final RxList<String> data = <String>[].obs;
+  final RxList<String> images = <String>[].obs;
+
   var liked = <bool>[].obs;
   var isEditing = <bool>[].obs;
   final RxList<TextEditingController> nameController =
@@ -22,6 +24,17 @@ class Controller extends GetxController {
   final Usecases usecase;
   Controller(this.usecase);
 
+  List<Model> get likedProducts {
+    return products
+        .asMap()
+        .entries
+        .where((entry) {
+          return liked[entry.key];
+        })
+        .map((entry) => entry.value)
+        .toList();
+  }
+
   Future<void> fetchProduct() async {
     try {
       dynamic response = await usecase.fetchProductusr();
@@ -32,6 +45,7 @@ class Controller extends GetxController {
 
         products.assignAll(productList);
         name.assignAll(productList.map((product) => product.name).toList());
+
         data.assignAll(productList.map((product) {
           if (product.data == null) {
             return 'N/A';
@@ -47,6 +61,7 @@ class Controller extends GetxController {
             List.generate(productList.length, (_) => TextEditingController()));
         dataController.assignAll(
             List.generate(productList.length, (_) => TextEditingController()));
+
         // print('controller,${response}');
       } else {
         print('Empty response from controller');

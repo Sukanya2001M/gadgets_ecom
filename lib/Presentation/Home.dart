@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gadgets_ecom/Presentation/Admin.dart';
+import 'package:gadgets_ecom/Presentation/LikedProducts.dart';
 import 'package:get/get.dart';
 import 'package:gadgets_ecom/Presentation/Controller/Controller.dart';
 
@@ -58,20 +59,69 @@ class HomeState extends State<Home> {
                   ),
                 ),
               ),
-              ListTile(
-                leading: Icon(Icons.admin_panel_settings, color: Colors.indigo),
-                title: Text('Admin'),
-                onTap: () {
-                  Get.to(() => AdminScreen()); // Navigate to AdminScreen
-                },
+              Column(
+                children: [
+                  Padding(
+                    padding: EdgeInsets.only(left: 10, right: 10),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 12, horizontal: 16),
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.grey.withOpacity(0.2)),
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: GestureDetector(
+                        onTap: () {
+                          Get.to(
+                              () => AdminScreen()); // Navigate to AdminScreen
+                        },
+                        child: Row(
+                          children: [
+                            Icon(Icons.admin_panel_settings,
+                                color: Colors.indigo),
+                            const SizedBox(width: 12),
+                            Text(
+                              'Admin',
+                              style: TextStyle(
+                                  fontSize: 16, fontWeight: FontWeight.w500),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  Padding(
+                    padding: EdgeInsets.only(left: 10, right: 10),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 12, horizontal: 10),
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.grey.withOpacity(0.2)),
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: GestureDetector(
+                        onTap: () {
+                          Get.to(() => LikedProducts());
+                        },
+                        child: Row(
+                          children: [
+                            Icon(Icons.favorite, color: Colors.indigo),
+                            const SizedBox(width: 12),
+                            Text(
+                              'Liked Products',
+                              style: TextStyle(
+                                  fontSize: 16, fontWeight: FontWeight.w500),
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
-              // ListTile(
-              //   leading: Icon(Icons.admin_panel_settings, color: Colors.indigo),
-              //   title: Text('Admin1'),
-              //   onTap: () {
-              //     // Handle tap
-              //   },
-              // ),
             ],
           ),
         ),

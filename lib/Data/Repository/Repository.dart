@@ -70,14 +70,9 @@ class Repositories {
   Future<String?> deleteproductrepo() async {
     try {
       dynamic response = await dio.delete(Constants.delete_url);
-      if (response.statusCode == 200) {
-        String message = response.data['message']; // Access the "message" field
-        print("Delete Message: $message");
-        return message; // Return the message
-      } else {
-        print("Failed to delete: ${response.statusCode}");
-        return null;
-      }
+      String message = response.data;
+      print("Delete Message: $message");
+      return message;
     } catch (e) {
       print("Error in deleting repo: $e");
       return null;
